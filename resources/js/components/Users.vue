@@ -162,6 +162,7 @@ export default {
       editmode: false,
       users: {},
       form: new Form({
+        id: "",
         name: "",
         email: "",
         password: "",
@@ -173,7 +174,23 @@ export default {
   },
   methods: {
     updateUser() {
-      console.log("Edit clicked");
+      this.$Progress.start();
+      //   console.log("Edit clicked");
+      this.form
+        .put("api/user/" + this.form.id)
+        .then(() => {
+          $("#addNew").modal("hide");
+          Swal.fire(
+            "Updated!",
+            "The User details has been updated.",
+            "success"
+          );
+          this.$Progress.finish();
+          this.loadUsers();
+        })
+        .catch(() => {
+          this.$Progress.fail();
+        });
     },
     editModal(user) {
       this.editmode = true;
@@ -235,9 +252,11 @@ export default {
             }
           });
           this.$Progress.finish();
-          //this.loadUsers();
+          this.loadUsers();
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$Progress.fail();
+        });
     }
   },
   created() {

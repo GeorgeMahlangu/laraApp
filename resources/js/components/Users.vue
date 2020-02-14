@@ -205,26 +205,41 @@ export default {
         },
         createUser() {
             this.$Progress.start();
-            this.form.post("api/user");
-            $("#addNew").modal("hide");
-            Swal.fire({
-                icon: "success",
-                title: "User Created Successfully",
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                onOpen: toast => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                }
-            });
-            this.$Progress.finish();
+            this.form
+                .post("api/user")
+                .then(() => {
+                    $("#addNew").modal("hide");
+                    Swal.fire({
+                        icon: "success",
+                        title: "User Created Successfully",
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        onOpen: toast => {
+                            toast.addEventListener(
+                                "mouseenter",
+                                Swal.stopTimer
+                            );
+                            toast.addEventListener(
+                                "mouseleave",
+                                Swal.resumeTimer
+                            );
+                        }
+                    });
+                    this.$Progress.finish();
+                    this.loadUsers();
+                })
+                .catch(() => {});
         }
     },
     created() {
         this.loadUsers();
+        // Fire.$on("AfterCreate", () => {
+        //     this.loadUsers();
+        // });
+        //setInterval(() => this.loadUsers(), "3000");
     }
 };
 </script>

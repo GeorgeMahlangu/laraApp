@@ -70,6 +70,7 @@ Vue.filter("upText", function(text) {
 Vue.filter("myDate", function(created) {
     return moment(created).format("MMMM Do YYYY"); // February 14th 2020, 9:09:12 am
 });
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

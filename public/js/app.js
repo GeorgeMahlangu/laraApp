@@ -1988,27 +1988,36 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     createUser: function createUser() {
+      var _this2 = this;
+
       this.$Progress.start();
-      this.form.post("api/user");
-      $("#addNew").modal("hide");
-      Swal.fire({
-        icon: "success",
-        title: "User Created Successfully",
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        onOpen: function onOpen(toast) {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        }
-      });
-      this.$Progress.finish();
+      this.form.post("api/user").then(function () {
+        $("#addNew").modal("hide");
+        Swal.fire({
+          icon: "success",
+          title: "User Created Successfully",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          onOpen: function onOpen(toast) {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          }
+        });
+
+        _this2.$Progress.finish();
+
+        _this2.loadUsers();
+      })["catch"](function () {});
     }
   },
   created: function created() {
-    this.loadUsers();
+    this.loadUsers(); // Fire.$on("AfterCreate", () => {
+    //     this.loadUsers();
+    // });
+    //setInterval(() => this.loadUsers(), "3000");
   }
 });
 

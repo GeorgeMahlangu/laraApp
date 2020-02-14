@@ -26,19 +26,17 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Type</th>
+                                    <th>Registered At</th>
                                     <th>Modify</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>183</td>
-                                    <td>John Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td>
-                                        <span class="tag tag-success"
-                                            >Approved</span
-                                        >
-                                    </td>
+                                <tr v-for="user in users" :key="user.id">
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.type | upText }}</td>
+                                    <td>{{ user.created_at | myDate }}</td>
                                     <td>
                                         <a href class>
                                             <i class="fa fa-edit blue"></i>
@@ -137,7 +135,7 @@
                                         'is-invalid': form.errors.has('type')
                                     }"
                                 >
-                                    <option value="">Select User Role</option>
+                                    <option value>Select User Role</option>
                                     <option value="admin">Admin</option>
                                     <option value="user">Standard User</option>
                                     <option value="author">Author</option>
@@ -190,6 +188,7 @@
 export default {
     data() {
         return {
+            users: {},
             form: new Form({
                 name: "",
                 email: "",
@@ -201,12 +200,31 @@ export default {
         };
     },
     methods: {
+        loadUsers() {
+            axios.get("api/user").then(({ data }) => (this.users = data.data));
+        },
         createUser() {
+            this.$Progress.start();
             this.form.post("api/user");
+            $("#addNew").modal("hide");
+            Swal.fire({
+                icon: "success",
+                title: "User Created Successfully",
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                onOpen: toast => {
+                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                }
+            });
+            this.$Progress.finish();
         }
     },
-    mounted() {
-        console.log("Component mounted.");
+    created() {
+        this.loadUsers();
     }
 };
 </script>

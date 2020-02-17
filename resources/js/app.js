@@ -11,7 +11,11 @@ window.Vue = require("vue");
 //All imported modules that are used on the app
 
 import moment from "moment";
-import { Form, HasError, AlertError } from "vform";
+import {
+    Form,
+    HasError,
+    AlertError
+} from "vform";
 import VueRouter from "vue-router";
 import VueProgressBar from "vue-progressbar";
 import Swal from "sweetalert2";
@@ -43,8 +47,7 @@ Vue.use(VueProgressBar, {
     height: "3px"
 });
 
-const routes = [
-    {
+const routes = [{
         path: "/dashboard",
         component: require("./components/Dashboard.vue").default
     },
@@ -55,6 +58,10 @@ const routes = [
     {
         path: "/users",
         component: require("./components/Users.vue").default
+    },
+    {
+        path: "/developer",
+        component: require("./components/Developer.vue").default
     }
 ];
 
@@ -63,11 +70,11 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 });
 
-Vue.filter("upText", function(text) {
+Vue.filter("upText", function (text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 });
 
-Vue.filter("myDate", function(created) {
+Vue.filter("myDate", function (created) {
     return moment(created).format("MMMM Do YYYY"); // February 14th 2020, 9:09:12 am
 });
 
@@ -87,6 +94,21 @@ Vue.filter("myDate", function(created) {
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
 
 const app = new Vue({
     el: "#app",

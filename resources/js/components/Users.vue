@@ -217,10 +217,12 @@ export default {
       }).then(result => {
         //send request to the server
         if (result.value) {
+          this.$Progress.start();
           this.form
             .delete("api/user/" + id)
             .then(() => {
               Swal.fire("Deleted!", "The User has been deleted.", "success");
+              this.$Progress.finish();
               this.loadUsers();
             })
             .catch(() => {
